@@ -14,7 +14,6 @@ class TicketsController < ApplicationController
 
   def new
     @ticket = Ticket.new
-    @ticket.define_singleton_method(:body) { String.new }
     respond_with(@ticket)
   end
 

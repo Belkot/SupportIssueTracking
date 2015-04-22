@@ -15,7 +15,6 @@ class User < ActiveRecord::Base
 
   has_many :owners
   has_many :tickets, through: :owners
-  has_many :bodies
   has_many :statuses
 
   def login=(login)
