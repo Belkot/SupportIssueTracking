@@ -24,4 +24,8 @@
             = f.input :login, required: true, placeholder: 'Username', label: false
             = f.input :password, required: false, placeholder: 'Password', label: false
             = f.button :submit, "Log in"
-    = yield
+    .container
+      = yield
+      %hr
+      .footer
+        %p &copy; Belkot Oleh 2015
