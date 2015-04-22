@@ -1,5 +1,19 @@
 source 'https://rubygems.org'
 
+gem 'haml-rails', '~> 0.9.0'
+gem 'simple_form', '~> 3.1.0'
+gem 'twitter-bootstrap-rails', '~> 3.2.0'
+
+group :development, :test do
+  gem 'rspec-rails', '~> 3.2.1'
+  gem 'factory_girl_rails', '~> 4.5.0'
+end
+
+group :test do
+  gem 'faker', '~> 1.4.3'
+  gem 'capybara', '~> 2.4.4'
+  gem 'database_cleaner', '~> 1.4.1'
+end
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.1.8'
