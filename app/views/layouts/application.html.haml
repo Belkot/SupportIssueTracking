@@ -7,4 +7,21 @@
     = javascript_include_tag 'application', 'data-turbolinks-track' => true
     = csrf_meta_tags
   %body
+    = nav_bar fixed: :top, brand: "Support Issue Tracking", brand_link: root_path, responsive: true do
+      = menu_group do
+        = menu_item "New ticket", root_path
+        - if user_signed_in?
+
+          = menu_divider
+
+          = menu_item "Tikets", tickets_path
+          = menu_item "Departments", departments_path
+      = menu_group pull: :right do
+        - if current_user
+          = menu_item "#{current_user.username} Logout", destroy_user_session_path
+        - else
+          = simple_form_for(resource, as: resource_name, url: session_path(resource_name), :html => {:class => 'form-inline navbar-form' }) do |f|
+            = f.input :login, required: true, placeholder: 'Username', label: false
+            = f.input :password, required: false, placeholder: 'Password', label: false
+            = f.button :submit, "Log in"
     = yield
