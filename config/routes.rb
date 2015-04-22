@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :answers
+
   resources :status_types
 
   resources :departments
