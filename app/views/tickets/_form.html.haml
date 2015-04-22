@@ -2,11 +2,12 @@
   = f.error_notification
 
   .form-inputs
-    = f.input :name
-    = f.input :email
-    = f.association :department
-    = f.input :reference
-    = f.input :subject
+    = f.input :name, required: true
+    = f.input :email, required: true
+    = f.association :department, required: true, placeholder: 'Select department'
+    /= f.input :reference
+    = f.input :subject, required: true, placeholder: 'Subject'
+    = f.input :body, as: :text, required: true, placeholder: 'Write your issue.'
 
   .form-actions
     = f.button :submit
