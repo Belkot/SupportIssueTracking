@@ -9,8 +9,8 @@
   %body
     = nav_bar fixed: :top, brand: "Support Issue Tracking", brand_link: root_path, responsive: true do
       = menu_group do
-        = menu_item "New ticket", root_path
         - if user_signed_in?
+          = menu_item "New ticket", root_path
 
           = menu_divider
 
@@ -26,7 +26,10 @@
             = f.input :password, required: false, placeholder: 'Password', label: false
             = f.button :submit, "Log in"
     .container
+      - flash.each do |key, value|
+        = content_tag(:div, value, class: "alert alert-#{key}")
       = yield
       %hr
       .footer
         %p &copy; Belkot Oleh 2015
+        = debug(params) if Rails.env.development?

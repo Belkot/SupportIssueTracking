@@ -2,12 +2,16 @@
   = f.error_notification
 
   .form-inputs
-    = f.input :name, required: true
-    = f.input :email, required: true
-    = f.association :department, required: true, placeholder: 'Select department'
+    .row
+      .col-xs-4
+        = f.input :name, required: true, autofocus: true, placeholder: 'Your Name', input_html: { maxlength: 30 }
+      .col-xs-4
+        = f.input :email, required: true, placeholder: 'user@domain.com', input_html: { maxlength: 127 }
+      .col-xs-4
+        = f.association :department, required: true, placeholder: 'Select department'
     /= f.input :reference
-    = f.input :subject, required: true, placeholder: 'Subject'
-    /= f.input :body, as: :text, required: true, placeholder: 'Write your issue.'
+    = f.input :subject, required: true, placeholder: 'Write the subject of issue', input_html: { maxlength: 255 }
+    = f.input :body, required: true, placeholder: 'Write your issue', input_html: { maxlength: 4000 }
 
   .form-actions
-    = f.button :submit
+    = f.button :submit, class: 'btn-primary'
