@@ -26,8 +26,7 @@
             = f.input :password, required: false, placeholder: 'Password', label: false
             = f.button :submit, "Log in"
     .container
-      - flash.each do |key, value|
-        = content_tag(:div, value, class: "alert alert-#{key}")
+      = bootstrap_flash
       = yield
       %hr
       .footer

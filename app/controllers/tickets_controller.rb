@@ -1,4 +1,5 @@
 class TicketsController < ApplicationController
+  before_action :authenticate_user!, except: [:show, :new, :create]
   before_action :set_ticket, only: [:show, :edit, :update, :destroy]
 
   respond_to :html
@@ -9,7 +10,11 @@ class TicketsController < ApplicationController
   end
 
   def show
-    respond_with(@ticket)
+    if @ticket
+      respond_with(@ticket)
+    else
+      render file: "public/404.html", status: 404
+    end
   end
 
   def new
@@ -22,8 +27,12 @@ class TicketsController < ApplicationController
 
   def create
     @ticket = Ticket.new(ticket_params)
-    @ticket.save
-    respond_with(@ticket)
+    if @ticket.save
+      flash[:notice] = "Your ticket was saved. We sent you on email the link to the ticket."
+      user_signed_in? ? respond_with(@ticket) : redirect_to(action: "show", id: @ticket.reference)
+    else
+      respond_with(@ticket)
+    end
   end
 
   def update
@@ -38,7 +47,12 @@ class TicketsController < ApplicationController
 
   private
     def set_ticket
-      @ticket = Ticket.find(params[:id])
+      if user_signed_in?
+        @ticket = Ticket.find(params[:id])
+      else
+        @ticket = Ticket.find_by reference: params[:id]
+        #params[:id] = @ticket.id
+      end
     end
 
     def ticket_params
