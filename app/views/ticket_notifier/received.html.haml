@@ -3,4 +3,4 @@
 = @greeting
 
 %p This is a notification that ticket #{@ticket.reference} was created on your behalf.
-%p Click #{link_to 'here', tickets_url + '/' + @ticket.reference} to view its status.
+%p Click #{link_to 'here', ticket_url(@ticket.reference)} to view its status.
