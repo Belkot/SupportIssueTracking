@@ -29,6 +29,7 @@ class TicketsController < ApplicationController
     @ticket = Ticket.new(ticket_params)
     if @ticket.save
       flash[:notice] = "Your ticket was saved. We sent you on email the link to the ticket."
+      TicketNotifier.received(@ticket).deliver
       user_signed_in? ? respond_with(@ticket) : redirect_to(action: "show", id: @ticket.reference)
     else
       respond_with(@ticket)

@@ -1,0 +1,8 @@
+%p
+  = @greeting
+
+  %p
+  %h2 Your ticket reference #{@ticket.reference}
+  %p
+  = link_to 'Your link', tickets_url + '/' + @ticket.reference
+  %p
