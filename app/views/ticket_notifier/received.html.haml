@@ -1,8 +1,6 @@
+%p Support Issue Tracking
 %p
-  = @greeting
+= @greeting
 
-  %p
-  %h2 Your ticket reference #{@ticket.reference}
-  %p
-  = link_to 'Your link', tickets_url + '/' + @ticket.reference
-  %p
+%p This is a notification that ticket #{@ticket.reference} was created on your behalf.
+%p Click #{link_to 'here', tickets_url + '/' + @ticket.reference} to view its status.
