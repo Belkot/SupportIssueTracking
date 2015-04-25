@@ -24,3 +24,19 @@
     = render 'status'
   - else
     = @ticket.statuses.order(created_at: :desc).first.status_type.name
+%p
+  %b Curent owner:
+  - if @ticket.owners.first
+    = @ticket.owners.order(created_at: :desc).first.user.username
+
+  - unless @ticket.owners.first && @ticket.owners.order(created_at: :desc).first.user == current_user
+    = simple_form_for [@ticket, @ticket.owners.new] do |f|
+      = f.error_notification
+      .form-actions
+        = f.button :submit, class: 'btn-primary', value: "Be owner"
+%p
+  %b Owners history:
+  - @ticket.owners.order(created_at: :asc).each do |owner|
+    %br
+    = time_tag owner.created_at
+    = owner.user.username

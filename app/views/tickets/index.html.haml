@@ -8,7 +8,8 @@
       %th Department
       %th Reference
       %th Subject
-      %th
+      %th Status
+      %th Owner
       %th
       %th
       %th
@@ -22,6 +23,10 @@
         %td= ticket.reference
         %td= ticket.subject
         %td= ticket.statuses.order(created_at: :desc).first.status_type.name
+        - if ticket.owners.first
+          %td= ticket.owners.order(created_at: :desc).first.user.username
+        - else
+          %td
         %td= link_to 'Show', ticket
         %td= link_to 'Edit', edit_ticket_path(ticket)
         %td= link_to 'Destroy', ticket, :method => :delete, :data => { :confirm => 'Are you sure?' }

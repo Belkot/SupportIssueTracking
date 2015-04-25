@@ -7,6 +7,7 @@ Rails.application.routes.draw do
 
   resources :tickets do
     resources :statuses, only: :update
+    resources :owners, only: :create
   end
 
   devise_for :users
