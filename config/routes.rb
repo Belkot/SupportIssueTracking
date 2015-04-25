@@ -5,7 +5,9 @@ Rails.application.routes.draw do
 
   resources :departments
 
-  resources :tickets
+  resources :tickets do
+    resources :statuses, only: :update
+  end
 
   devise_for :users
   # The priority is based upon order of creation: first created -> highest priority.

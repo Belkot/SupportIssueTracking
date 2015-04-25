@@ -11,15 +11,17 @@
       %th
       %th
       %th
+      %th
 
   %tbody
     - @tickets.each do |ticket|
       %tr
         %td= ticket.name
         %td= ticket.email
-        %td= ticket.department
+        %td= ticket.department.name
         %td= ticket.reference
         %td= ticket.subject
+        %td= ticket.statuses.order(created_at: :desc).first.status_type.name
         %td= link_to 'Show', ticket
         %td= link_to 'Edit', edit_ticket_path(ticket)
         %td= link_to 'Destroy', ticket, :method => :delete, :data => { :confirm => 'Are you sure?' }

@@ -3,6 +3,7 @@ class Ticket < ActiveRecord::Base
   has_many :owners
   has_many :users, through: :owners
   has_many :statuses
+  #accepts_nested_attributes_for :statuses
   has_many :status_types, through: :statuses
   has_many :answers
 
@@ -21,6 +22,7 @@ class Ticket < ActiveRecord::Base
   validates :body, presence: true, length: { in: 15..4000 }
 
   before_validation :set_reference, on: :create
+  after_create :set_status_waiting_for_staff_response
 
   private
 
@@ -44,6 +46,14 @@ class Ticket < ActiveRecord::Base
 
     def set_reference
       self.reference = get_unique_reference
+    end
+
+    def set_status_waiting_for_staff_response
+      status = Status.new
+      status.status_type = StatusType.where(name: "Waiting for Staff Response").first
+      status.ticket = self
+      status.user = nil
+      status.save
     end
 
 end

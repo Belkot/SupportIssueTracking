@@ -15,7 +15,12 @@
 %p
   %b Subject:
   = @ticket.subject
-
-= link_to 'Edit', edit_ticket_path(@ticket)
-\|
-= link_to 'Back', tickets_path
+%p
+  %b Body:
+  = @ticket.body
+%p
+  %b Curent status:
+  - if user_signed_in?
+    = render 'status'
+  - else
+    = @ticket.statuses.order(created_at: :desc).first.status_type.name
