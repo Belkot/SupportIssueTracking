@@ -12,4 +12,11 @@ class TicketNotifier < ActionMailer::Base
 
     mail to: @ticket.email, subject: 'Confirming your request with unique reference.'
   end
+
+  def answer_received(answer)
+    @answer = answer
+    @greeting = "Hi " + @answer.ticket.name + ' !'
+
+    mail to: @answer.ticket.email, subject: 'New answer for your ticket.'
+  end
 end

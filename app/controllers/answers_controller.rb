@@ -7,7 +7,7 @@ class AnswersController < ApplicationController
       answer.user_id = current_user.id
       if answer.save
         flash[:notice] = "Answer be e-mailed to the client."
-        # send email
+        TicketNotifier.answer_received(answer).deliver
       end
       redirect_to ticket_path(answer.ticket_id)
     else

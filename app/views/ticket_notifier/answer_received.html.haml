@@ -1,0 +1,9 @@
+%p Support Issue Tracking
+%p
+= @greeting
+
+%p This is a notification that ticket #{@answer.ticket.reference} have answer:
+%p The #{@answer.user.username} wrote:
+%p #{@answer.body}
+
+%p Click #{link_to 'here', ticket_url( @answer.ticket.reference)} to view.
