@@ -28,7 +28,7 @@
   %b Status history:
   - @ticket.statuses.order(created_at: :asc).each do |status|
     %br
-    = time_tag status.created_at
+    = time_tag status.created_at.to_time
     - if status.user
       %b #{status.user.username}
     - else
@@ -41,17 +41,17 @@
   %b Curent owner:
   - if @ticket.owners.first
     = @ticket.owners.order(created_at: :desc).first.user.username
-
-  - unless @ticket.owners.first && @ticket.owners.order(created_at: :desc).first.user == current_user
-    = simple_form_for [@ticket, @ticket.owners.new] do |f|
-      = f.error_notification
-      .form-actions
-        = f.button :submit, "Be owner", class: 'btn-primary'
+  - if user_signed_in?
+    - unless @ticket.owners.first && @ticket.owners.order(created_at: :desc).first.user == current_user
+      = simple_form_for [@ticket, @ticket.owners.new] do |f|
+        = f.error_notification
+        .form-actions
+          = f.button :submit, "Be owner", class: 'btn-primary'
 %p
   %b Owners history:
   - @ticket.owners.order(created_at: :asc).each do |owner|
     %br
-    = time_tag owner.created_at
+    = time_tag owner.created_at.to_time
     = owner.user.username
 %p
   %b Answers:
@@ -61,7 +61,7 @@
       %b #{answer.user.username}
     - else
       /Customer
-    = time_tag answer.created_at
+    = time_tag answer.created_at.to_time
     = answer.body
 
   = simple_form_for [@ticket, @ticket.answers.new] do |f|
