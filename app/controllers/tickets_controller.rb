@@ -5,7 +5,11 @@ class TicketsController < ApplicationController
   respond_to :html
 
   def index
-    @tickets = Ticket.all
+    if params[:search]
+      @tickets = Ticket.search(params[:search])
+    else
+      @tickets = Ticket.all
+    end
     respond_with(@tickets)
   end
 
@@ -52,7 +56,6 @@ class TicketsController < ApplicationController
         @ticket = Ticket.find(params[:id])
       else
         @ticket = Ticket.find_by reference: params[:id]
-        #params[:id] = @ticket.id
       end
     end
 

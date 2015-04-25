@@ -13,18 +13,22 @@
           = menu_item "New ticket", root_path
 
           = menu_divider
-
           = menu_item "Tikets", tickets_path
           = menu_item "Departments", departments_path
           = menu_item "Statuses", status_types_path
       = menu_group pull: :right do
-        - if current_user
-          = menu_item "#{current_user.username} Logout", destroy_user_session_path
+        - if user_signed_in?
+          = menu_item "#{current_user.username} Log out", destroy_user_session_path
         - else
           = simple_form_for(resource, as: resource_name, url: session_path(resource_name), :html => {:class => 'form-inline navbar-form' }) do |f|
             = f.input :login, required: true, placeholder: 'Username', label: false
             = f.input :password, required: false, placeholder: 'Password', label: false
             = f.button :submit, "Log in"
+      = menu_group pull: :right do
+        - if user_signed_in?
+          = form_tag(tickets_path, method: 'get', id: 'search-form', class: 'form-inline navbar-form') do
+            = text_field_tag :search, params[:search]
+            = submit_tag "Search"
     .container
       = bootstrap_flash
       = yield

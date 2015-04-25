@@ -24,6 +24,10 @@ class Ticket < ActiveRecord::Base
   before_validation :set_reference, on: :create
   after_create :set_status_waiting_for_staff_response
 
+  def self.search(query)
+    where("reference = ? OR subject LIKE ?", query, "%#{query}%").order(:reference, created_at: :desc)
+  end
+
   private
 
     def generate_reference
