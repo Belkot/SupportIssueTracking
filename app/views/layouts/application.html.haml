@@ -26,9 +26,11 @@
             = f.button :submit, "Log in"
       = menu_group pull: :right do
         - if user_signed_in?
-          = form_tag(tickets_path, method: 'get', id: 'search-form', class: 'form-inline navbar-form') do
-            = text_field_tag :search, params[:search]
-            = submit_tag "Search"
+          = form_tag(tickets_path, method: 'get', class: 'form-inline navbar-form') do
+            .input-group
+              = search_field_tag :search, params[:search], class: "form-control", placeholder: "Search for..."
+              %span.input-group-btn
+                = submit_tag "Search", name: nil, class: "btn btn-default"
     .container
       = bootstrap_flash
       = yield
