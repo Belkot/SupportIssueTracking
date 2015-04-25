@@ -25,6 +25,19 @@
   - else
     = @ticket.statuses.order(created_at: :desc).first.status_type.name
 %p
+  %b Status history:
+  - @ticket.statuses.order(created_at: :asc).each do |status|
+    %br
+    = time_tag status.created_at
+    - if status.user
+      %b #{status.user.username}
+    - else
+      /Customer
+    - if status.status_type
+      = status.status_type.name
+    - else
+      No status
+%p
   %b Curent owner:
   - if @ticket.owners.first
     = @ticket.owners.order(created_at: :desc).first.user.username
