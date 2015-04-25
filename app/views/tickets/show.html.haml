@@ -46,10 +46,27 @@
     = simple_form_for [@ticket, @ticket.owners.new] do |f|
       = f.error_notification
       .form-actions
-        = f.button :submit, class: 'btn-primary', value: "Be owner"
+        = f.button :submit, "Be owner", class: 'btn-primary'
 %p
   %b Owners history:
   - @ticket.owners.order(created_at: :asc).each do |owner|
     %br
     = time_tag owner.created_at
     = owner.user.username
+%p
+  %b Answers:
+  - @ticket.answers.order(created_at: :asc).each do |answer|
+    %br
+    - if answer.user
+      %b #{answer.user.username}
+    - else
+      /Customer
+    = time_tag answer.created_at
+    = answer.body
+
+  = simple_form_for [@ticket, @ticket.answers.new] do |f|
+    = f.error_notification
+    .form-inputs
+      = f.input :body, label: false, required: true, placeholder: 'Write your answer.', input_html: { maxlength: 4000 }, hint: 'Minimum 10 and maximum 4000 characters.'
+    .form-actions
+      = f.button :submit, class: 'btn-primary'

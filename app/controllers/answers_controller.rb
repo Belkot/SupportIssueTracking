@@ -1,47 +1,25 @@
 class AnswersController < ApplicationController
-  before_action :set_answer, only: [:show, :edit, :update, :destroy]
-
-  respond_to :html
-
-  def index
-    @answers = Answer.all
-    respond_with(@answers)
-  end
-
-  def show
-    respond_with(@answer)
-  end
-
-  def new
-    @answer = Answer.new
-    respond_with(@answer)
-  end
-
-  def edit
-  end
 
   def create
-    @answer = Answer.new(answer_params)
-    @answer.save
-    respond_with(@answer)
-  end
-
-  def update
-    @answer.update(answer_params)
-    respond_with(@answer)
-  end
-
-  def destroy
-    @answer.destroy
-    respond_with(@answer)
+    answer = Answer.new(answer_params)
+    answer.ticket_id = params[:ticket_id]
+    if user_signed_in?
+      answer.user_id = current_user.id
+      if answer.save
+        flash[:notice] = "Answer be e-mailed to the client."
+        # send email
+      end
+      redirect_to ticket_path(answer.ticket_id)
+    else
+      answer.user_id = nil
+      answer.save
+      redirect_to ticket_path(Ticket.find(params[:ticket_id]).reference)
+    end
   end
 
   private
-    def set_answer
-      @answer = Answer.find(params[:id])
-    end
 
     def answer_params
-      params.require(:answer).permit(:body, :ticket_id, :user_id)
+      params.require(:answer).permit(:body)
     end
 end

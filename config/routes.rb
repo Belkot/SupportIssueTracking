@@ -1,6 +1,4 @@
 Rails.application.routes.draw do
-  resources :answers
-
   resources :status_types
 
   resources :departments
@@ -8,6 +6,7 @@ Rails.application.routes.draw do
   resources :tickets do
     resources :statuses, only: :update
     resources :owners, only: :create
+    resources :answers, only: :create
   end
 
   devise_for :users
