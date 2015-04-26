@@ -10,35 +10,33 @@
     = nav_bar fixed: :top, brand: "Support Issue Tracking", brand_link: root_path, responsive: true do
       = menu_group do
         - if user_signed_in?
-          /= menu_item "Tikets", tickets_path
           /= menu_item "Create", root_path
-          = menu_divider
+          /= menu_divider
           = menu_item "New unassigned", unassigned_tickets_path
           = menu_item "Open", open_tickets_path
           = menu_item "On hold", onhold_tickets_path
           = menu_item "Closed", closed_tickets_path
           = menu_divider
           = drop_down "Settings" do
+            = menu_item "All tikets", tickets_path
             = menu_item "Staff"
             = menu_item "Departments", departments_path
             = menu_item "Statuses", status_types_path
+            /- if current_user.admin
+            /  = menu_item 'New user', new_user_registration_path
             = drop_down_divider
-            = menu_item "My settings"
+            = menu_item "My settings", edit_user_registration_path
       = menu_group pull: :right do
         - if user_signed_in?
+          = form_tag(tickets_path, method: 'get', class: 'navbar-form navbar-search pull-left') do
+            = text_field_tag :search, params[:search], class: "search-query", placeholder: "Search for..."
+            /= submit_tag "Search", name: nil
           = menu_item "#{current_user.username} Log out", destroy_user_session_path
         - else
-          = simple_form_for(resource, as: resource_name, url: session_path(resource_name), :html => {:class => 'form-inline navbar-form' }) do |f|
+          = simple_form_for(resource, as: resource_name, url: session_path(resource_name), :html => {:class => 'navbar-form pull-right' }) do |f|
             = f.input :login, required: true, placeholder: 'Username', label: false
             = f.input :password, required: false, placeholder: 'Password', label: false
             = f.button :submit, "Log in"
-      = menu_group pull: :right do
-        - if user_signed_in?
-          = form_tag(tickets_path, method: 'get', class: 'form-inline navbar-form') do
-            .input-group.navbar-search
-              = search_field_tag :search, params[:search], class: "form-control", placeholder: "Search for..."
-              %span.input-group-btn
-                = submit_tag "Search", name: nil, class: "btn btn-default"
     .container
       = bootstrap_flash
       = yield
