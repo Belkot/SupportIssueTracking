@@ -7,6 +7,12 @@ Rails.application.routes.draw do
     resources :statuses, only: :update
     resources :owners, only: :create
     resources :answers, only: :create
+    collection do
+      get 'unassigned'
+      get 'open'
+      get 'onhold'
+      get 'closed'
+    end
   end
 
   devise_for :users

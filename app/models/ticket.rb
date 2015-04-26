@@ -3,7 +3,6 @@ class Ticket < ActiveRecord::Base
   has_many :owners
   has_many :users, through: :owners
   has_many :statuses
-  #accepts_nested_attributes_for :statuses
   has_many :status_types, through: :statuses
   has_many :answers
 
@@ -13,7 +12,6 @@ class Ticket < ActiveRecord::Base
   validates :email, presence: true, length: { in: 3..127 }, format: { with: VALID_EMAIL_REGEX }
 
   validates :department, presence: true
-  #validates_associated: department
 
   VALID_REFERENCE_REGEX = /[AAA-ZZZ]\-\d{6}/
   validates :reference, presence: true, uniqueness: true, format: { with: VALID_REFERENCE_REGEX }
@@ -28,7 +26,68 @@ class Ticket < ActiveRecord::Base
     where("reference = ? OR subject LIKE ?", query, "%#{query}%").order(:reference, created_at: :desc)
   end
 
+  def self.unassigned
+     where.not(id: Owner.distinct.pluck(:ticket_id))
+  end
+
+  def self.open
+    sql_query = " SELECT ticket_id " +
+                " FROM (           " +
+                "       SELECT MAX(statuses.created_at) AS maximum_created_at," +
+                "              ticket_id AS ticket_id,                        " +
+                "              status_type_id                                 " +
+                "       FROM statuses                                         " +
+                "       GROUP BY ticket_id                                    " +
+                "      )                                                      " +
+                " WHERE status_type_id = (                                    " +
+                "                         SELECT id                           " +
+                "                         FROM status_types                   " +
+                "                         WHERE name = 'Waiting for Customer' " +
+                "                        )"
+    find get_ticket_ids(sql_query)
+  end
+
+  def self.onhold
+    sql_query = " SELECT ticket_id " +
+                " FROM (           " +
+                "       SELECT MAX(statuses.created_at) AS maximum_created_at," +
+                "              ticket_id AS ticket_id,                        " +
+                "              status_type_id                                 " +
+                "       FROM statuses                                         " +
+                "       GROUP BY ticket_id                                    " +
+                "      )                                                      " +
+                " WHERE status_type_id = (                       " +
+                "                         SELECT id              " +
+                "                         FROM status_types      " +
+                "                         WHERE name = 'On Hold' " +
+                "                        )"
+    find get_ticket_ids(sql_query)
+  end
+
+  def self.closed
+    sql_query = " SELECT ticket_id " +
+                " FROM (           " +
+                "       SELECT MAX(statuses.created_at) AS maximum_created_at," +
+                "              ticket_id AS ticket_id,                        " +
+                "              status_type_id                                 " +
+                "       FROM statuses                                         " +
+                "       GROUP BY ticket_id                                    " +
+                "      )                                                      " +
+                " WHERE status_type_id IN (                       " +
+                "                          SELECT id              " +
+                "                          FROM status_types      " +
+                "                          WHERE name = 'Cancelled'  " +
+                "                             OR name = 'Completed'  " +
+                "                         )"
+    find get_ticket_ids(sql_query)
+  end
+
   private
+
+    def self.get_ticket_ids(sql_query)
+      st = Status.find_by_sql(sql_query)
+      st.map(&:ticket_id)
+    end
 
     def generate_reference
       prefix = ('AAA'..'ZZZ').to_a.sample

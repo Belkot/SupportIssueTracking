@@ -4,6 +4,26 @@ class TicketsController < ApplicationController
 
   respond_to :html
 
+  def unassigned
+    @tickets = Ticket.unassigned
+    render 'index'
+  end
+
+  def open
+    @tickets = Ticket.open
+    render 'index'
+  end
+
+  def onhold
+    @tickets = Ticket.onhold
+    render 'index'
+  end
+
+  def closed
+    @tickets = Ticket.closed
+    render 'index'
+  end
+
   def index
     if params[:search]
       @tickets = Ticket.search(params[:search])
