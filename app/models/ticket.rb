@@ -112,11 +112,7 @@ class Ticket < ActiveRecord::Base
     end
 
     def set_status_waiting_for_staff_response
-      status = Status.new
-      status.status_type = StatusType.where(name: "Waiting for Staff Response").first
-      status.ticket = self
-      status.user = nil
-      status.save
+      Status.new.set_waiting_for_staff_response self
     end
 
 end

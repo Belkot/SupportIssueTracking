@@ -13,6 +13,7 @@ class AnswersController < ApplicationController
     else
       answer.user_id = nil
       answer.save
+      Status.new.set_waiting_for_staff_response Ticket.find(params[:ticket_id])
       redirect_to ticket_path(Ticket.find(params[:ticket_id]).reference)
     end
   end
