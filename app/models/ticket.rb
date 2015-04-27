@@ -1,5 +1,5 @@
 class Ticket < ActiveRecord::Base
-  belongs_to :department
+  belongs_to :department, -> { where enable: true }
   has_many :owners
   has_many :users, through: :owners
   has_many :statuses

@@ -34,7 +34,8 @@ class DepartmentsController < ApplicationController
   end
 
   def destroy
-    @department.destroy
+    @department.enable = false
+    flash[:notice] = "Department #{@department.name} disabled." if @department.save
     respond_with(@department)
   end
 
@@ -44,6 +45,6 @@ class DepartmentsController < ApplicationController
     end
 
     def department_params
-      params.require(:department).permit(:name)
+      params.require(:department).permit(:name, :enable)
     end
 end
