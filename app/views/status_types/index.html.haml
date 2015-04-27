@@ -1,21 +1,21 @@
-%h1 Listing status_types
-
-%table
+.page-header
+  %h1 Listing statuses
+%table.table.table-striped
   %thead
     %tr
       %th Name
+      %th Created
+      %th Updated
       %th
-      %th
-      %th
-
   %tbody
     - @status_types.each do |status_type|
       %tr
         %td= status_type.name
-        %td= link_to 'Show', status_type
-        %td= link_to 'Edit', edit_status_type_path(status_type)
-        %td= link_to 'Destroy', status_type, :method => :delete, :data => { :confirm => 'Are you sure?' }
-
+        %td= time_tag status_type.created_at.to_time
+        %td= time_tag status_type.updated_at.to_time
+        %td
+          = link_to 'Show', status_type, class: 'btn btn-default btn-xs'
+          = link_to 'Edit', edit_status_type_path(status_type), class: 'btn btn-default btn-xs'
+          = link_to 'Delete', status_type_path(status_type), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-xs btn-danger'
 %br
-
-= link_to 'New Status type', new_status_type_path
+= link_to 'New', new_status_type_path, class: 'btn btn-primary'

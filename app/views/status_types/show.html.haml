@@ -1,9 +1,10 @@
-/%p#notice= notice
-/
+.page-header
+  %h1 Status
 %p
-  %b Name:
-  = @status_type.name
+  %strong Name:
+  %br
+    = @status_type.name
 
-= link_to 'Edit', edit_status_type_path(@status_type)
-\|
-= link_to 'Back', status_types_path
+= link_to 'Back', status_types_path, class: 'btn btn-default'
+= link_to 'Edit', edit_status_type_path(@status_type), class: 'btn btn-default'
+= link_to 'Disable', status_type_path(@status_type), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger'

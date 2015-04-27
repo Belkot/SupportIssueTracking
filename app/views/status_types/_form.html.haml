@@ -1,8 +1,7 @@
 = simple_form_for(@status_type) do |f|
   = f.error_notification
-
   .form-inputs
     = f.input :name
-
   .form-actions
-    = f.button :submit
+    = f.button :submit, class: 'btn-primary'
+    = link_to 'Cancel', status_types_path, class: 'btn btn-default'
