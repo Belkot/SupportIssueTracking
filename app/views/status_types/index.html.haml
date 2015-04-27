@@ -16,6 +16,6 @@
         %td
           = link_to 'Show', status_type, class: 'btn btn-default btn-xs'
           = link_to 'Edit', edit_status_type_path(status_type), class: 'btn btn-default btn-xs'
-          = link_to 'Delete', status_type_path(status_type), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-xs btn-danger'
+          = link_to 'Delete', status_type, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-xs btn-danger'
 %br
 = link_to 'New', new_status_type_path, class: 'btn btn-primary'

@@ -4,7 +4,7 @@
   %thead
     %tr
       %th Name
-      %th Disabled
+      %th Status
       %th Created
       %th Updated
       %th
@@ -20,6 +20,6 @@
         %td
           = link_to 'Show', department, class: 'btn btn-default btn-xs'
           = link_to 'Edit', edit_department_path(department), class: 'btn btn-default btn-xs'
-          = link_to 'Disable', department_path(department), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-xs btn-danger'
+          = link_to 'Disable', department, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-xs btn-danger'
 %br
 = link_to 'New', new_department_path, class: 'btn btn-primary'
