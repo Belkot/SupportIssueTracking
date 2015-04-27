@@ -1,6 +1,5 @@
 class TicketsController < ApplicationController
   before_action :authenticate_user!, except: [:show, :new, :create]
-  before_action :set_ticket, only: [:show, :edit, :update, :destroy]
 
   respond_to :html
 
@@ -34,19 +33,17 @@ class TicketsController < ApplicationController
   end
 
   def show
-    if @ticket
-      respond_with(@ticket)
+    if user_signed_in?
+      @ticket = Ticket.find_by id: params[:id]
     else
-      render file: "public/404.html", status: 404
+      @ticket = Ticket.find_by reference: params[:id]
     end
+    @ticket ? respond_with(@ticket) : render(file: "public/404.html", status: 404)
   end
 
   def new
     @ticket = Ticket.new
     respond_with(@ticket)
-  end
-
-  def edit
   end
 
   def create
@@ -60,16 +57,6 @@ class TicketsController < ApplicationController
     end
   end
 
-  def update
-    @ticket.update(ticket_params)
-    respond_with(@ticket)
-  end
-
-  def destroy
-    @ticket.destroy
-    respond_with(@ticket)
-  end
-
   private
 
     def paginate(obj, per=25)
@@ -77,17 +64,6 @@ class TicketsController < ApplicationController
         Kaminari.paginate_array(obj).page(params[:page]).per(per)
       else
         obj.page params[:page]
-      end
-    end
-    # def paginate(array)
-    #   Kaminari.paginate_array(array).page(params[:page]).per(3)
-    # end
-
-    def set_ticket
-      if user_signed_in?
-        @ticket = Ticket.find(params[:id])
-      else
-        @ticket = Ticket.find_by reference: params[:id]
       end
     end
 

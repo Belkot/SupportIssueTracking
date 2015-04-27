@@ -3,7 +3,7 @@ Rails.application.routes.draw do
 
   resources :departments
 
-  resources :tickets do
+  resources :tickets, only: [:index, :show, :create, :new] do
     resources :statuses, only: :update
     resources :owners, only: :create
     resources :answers, only: :create

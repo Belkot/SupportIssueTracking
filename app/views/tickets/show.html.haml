@@ -1,72 +1,112 @@
-/%p#notice= notice
-/
-%p
-  %b Name:
-  = @ticket.name
-%p
-  %b Email:
-  = @ticket.email
-%p
-  %b Department:
-  = @ticket.department.try(:name)
-%p
-  %b Reference:
-  = @ticket.reference
-%p
-  %b Subject:
-  = @ticket.subject
-%p
-  %b Body:
-  = @ticket.body
-%p
-  %b Curent status:
-  - if user_signed_in?
-    = render 'status'
-  - else
-    = @ticket.statuses.order(created_at: :desc).first.status_type.name
-%p
-  %b Status history:
-  - @ticket.statuses.order(created_at: :asc).each do |status|
+.page-header
+  %h1 Ticket #{@ticket.reference}
+.row
+  .col-md-8
+    %table.table.table-striped
+      %thead
+        %tr
+          %th Created
+          %th Name
+          %th Email
+          %th Department
+          %th Curent status
+      %tbody
+        %tr
+          %td= time_tag @ticket.created_at.to_time
+          %td= @ticket.name
+          %td= @ticket.email
+          %td= @ticket.department.try(:name)
+          %td= @ticket.statuses.order(created_at: :desc).first.status_type.name
+    %b Subject:
+    = @ticket.subject
     %br
-    = time_tag status.created_at.to_time
-    - if status.user
-      %b #{status.user.username}
-    - else
-      /Customer
-    - if status.status_type
-      = status.status_type.name
-    - else
-      No status
-%p
-  %b Curent owner:
-  - if @ticket.owners.any?
-    = @ticket.owners.order(created_at: :desc).first.user.username
-  - if user_signed_in?
-    - unless @ticket.owners.first && @ticket.owners.order(created_at: :desc).first.user == current_user
-      = simple_form_for [@ticket, @ticket.owners.new] do |f|
-        = f.error_notification
-        .form-actions
-          = f.button :submit, "Be owner", class: 'btn-primary'
-%p
-  %b Owners history:
-  - @ticket.owners.order(created_at: :asc).each do |owner|
-    %br
-    = time_tag owner.created_at.to_time
-    = owner.user.username
-%p
-  %b Answers:
-  - @ticket.answers.order(created_at: :asc).each do |answer|
-    %br
-    - if answer.user
-      %b #{answer.user.username}
-    - else
-      /Customer
-    = time_tag answer.created_at.to_time
-    = answer.body
+    %b Body:
+    = @ticket.body
+    %p
+      %b Answers:
+      %table.table
+        %thead
+          %tr
+            %th
+            %th
+            %th
+        %tbody
+          - @ticket.answers.order(created_at: :asc).each do |answer|
+            %tr
+              %td
+                - if answer.user
+                  %b #{answer.user.username}
+                - else
+                  Customer
+                %br
+                = time_tag answer.created_at.to_time
+              %td= answer.body
+    %p
+    = simple_form_for [@ticket, @ticket.answers.new] do |f|
+      = f.error_notification
+      .form-inputs
+        = f.input :body, label: false, required: true, placeholder: 'Write your answer.', input_html: { maxlength: 4000 }, hint: 'Minimum 10 and maximum 4000 characters.'
+      .form-actions
+        = f.button :submit, class: 'btn-primary'
 
-  = simple_form_for [@ticket, @ticket.answers.new] do |f|
-    = f.error_notification
-    .form-inputs
-      = f.input :body, label: false, required: true, placeholder: 'Write your answer.', input_html: { maxlength: 4000 }, hint: 'Minimum 10 and maximum 4000 characters.'
-    .form-actions
-      = f.button :submit, class: 'btn-primary'
+  .col-md-4
+    .row
+      .col-md-6
+        %b Curent status:
+        - if user_signed_in?
+          = simple_form_for [@ticket, @ticket.statuses.order(created_at: :desc).first] do |f|
+            = f.error_notification
+            .form-inputs
+              = f.association :status_type, required: true, label: false, as: :radio_buttons
+            .form-actions
+              = f.button :submit, class: 'btn-primary'
+        - else
+          = @ticket.statuses.order(created_at: :desc).first.status_type.name
+      .col-md-6
+        %b Curent owner:
+        - if @ticket.owners.any?
+          = @ticket.owners.order(created_at: :desc).first.user.username
+        - if user_signed_in?
+          - unless @ticket.owners.first && @ticket.owners.order(created_at: :desc).first.user == current_user
+            = simple_form_for [@ticket, @ticket.owners.new] do |f|
+              = f.error_notification
+              .form-actions
+                = f.button :submit, "Be owner", class: 'btn-primary'
+
+    %br
+    .row
+      .col-md-12
+        %b Status history:
+        %table.table.table-striped
+          %thead
+            %tr
+              %th
+              %th
+          %tbody
+            - @ticket.statuses.order(created_at: :asc).each do |status|
+              %tr
+                %td
+                  = time_tag status.created_at.to_time
+                  - if status.user
+                    %b #{status.user.username}
+                  - else
+                    system
+                %td
+                  - if status.status_type
+                    = status.status_type.name
+                  - else
+                    Status deleted
+
+    .row
+      .col-md-12
+        %b Owners history:
+        %table.table.table-striped
+          %thead
+            %tr
+              %th
+          %tbody
+            - @ticket.owners.order(created_at: :asc).each do |owner|
+              %tr
+                %td
+                  = time_tag owner.created_at.to_time
+                  = owner.user.username
