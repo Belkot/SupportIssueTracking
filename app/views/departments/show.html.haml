@@ -1,9 +1,10 @@
-/%p#notice= notice
-/
+.page-header
+  %h1 Department
 %p
-  %b Name:
-  = @department.name
+  %strong Name:
+  %br
+    = @department.name
 
-= link_to 'Edit', edit_department_path(@department)
-\|
-= link_to 'Back', departments_path
+= link_to 'Back', departments_path, class: 'btn btn-default'
+= link_to 'Edit', edit_department_path(@department), class: 'btn btn-default'
+= link_to 'Disable', department_path(@department), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger'

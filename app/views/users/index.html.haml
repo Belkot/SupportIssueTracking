@@ -7,7 +7,7 @@
       %th Admin
       %th Created
       %th Updated
-      %th Enable
+      %th Disabled
       %th
       %th
       %th
@@ -19,8 +19,8 @@
         %td
           - if user.admin?
             administrator
-        %td= user.created_at
-        %td= user.updated_at
+        %td= time_tag user.created_at.to_time
+        %td= time_tag user.updated_at.to_time
         %td
           - if !user.enable?
             disable

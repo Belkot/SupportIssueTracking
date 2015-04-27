@@ -19,7 +19,7 @@
       %tr
         %td= ticket.name
         %td= ticket.email
-        %td= ticket.department.name
+        %td= ticket.department.try(:name)
         %td= ticket.reference
         %td= ticket.subject
         %td= ticket.statuses.order(created_at: :desc).first.status_type.name

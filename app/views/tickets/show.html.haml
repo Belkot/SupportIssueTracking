@@ -8,7 +8,7 @@
   = @ticket.email
 %p
   %b Department:
-  = @ticket.department.name
+  = @ticket.department.try(:name)
 %p
   %b Reference:
   = @ticket.reference
