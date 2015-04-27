@@ -18,13 +18,13 @@
           = menu_item "Closed", closed_tickets_path
           = menu_divider
           = drop_down "Settings" do
-            = menu_item "All tikets", tickets_path
-            = menu_item "Staff"
-            = menu_item "Departments", departments_path
-            = menu_item "Statuses", status_types_path
-            /- if current_user.admin
-            /  = menu_item 'New user', new_user_registration_path
-            = drop_down_divider
+            - if current_user.admin?
+              = menu_item "All tikets", tickets_path
+              = menu_item "Departments", departments_path
+              = menu_item "Statuses", status_types_path
+              = menu_item "Users", users_path
+              = menu_item 'New user', new_user_path#new_user_registration_path
+              = drop_down_divider
             = menu_item "My settings", edit_user_registration_path
       = menu_group pull: :right do
         - if user_signed_in?

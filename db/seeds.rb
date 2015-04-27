@@ -7,7 +7,8 @@
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
 User.delete_all
-User.create!(email: "admin@localhost.localhost", username: "admin", password: "12345678")
+User.create!(email: "admin@localhost.localhost", username: "admin", password: "12345678", admin: true)
+User.create!(email: "staff@localhost.localhost", username: "staff", password: "12345678")
 
 Department.delete_all
 Department.create!(name: "Head department")

@@ -1,5 +1,6 @@
 class DepartmentsController < ApplicationController
   before_action :authenticate_user!
+  before_action :authorize_admin
   before_action :set_department, only: [:show, :edit, :update, :destroy]
 
   respond_to :html

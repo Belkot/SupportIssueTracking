@@ -16,6 +16,8 @@ Rails.application.routes.draw do
   end
 
   devise_for :users
+  resources :users, except: :create
+  post 'create_user' => 'users#create', as: :create_user
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

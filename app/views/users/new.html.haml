@@ -1,11 +1,12 @@
 %h2 Sign up
-= simple_form_for(resource, as: resource_name, url: create_user_path(resource_name)) do |f|
+= simple_form_for(resource, as: resource_name, url: create_user_path) do |f|
   = f.error_notification
   .form-inputs
     = f.input :username, required: true, autofocus: true
     = f.input :email, required: true
     = f.input :password, required: true, hint: ("#{@minimum_password_length} characters minimum" if @validatable)
     = f.input :password_confirmation, required: true
+    = f.input :admin
   .form-actions
-    = f.button :submit, "Sign up"
-= render "users/shared/links"
+    = f.button :submit, "Create", class: 'btn btn-default'
+/= render "users/shared/links"
