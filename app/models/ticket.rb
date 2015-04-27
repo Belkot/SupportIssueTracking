@@ -39,11 +39,13 @@ class Ticket < ActiveRecord::Base
                 "       FROM statuses                                         " +
                 "       GROUP BY ticket_id                                    " +
                 "      )                                                      " +
-                " WHERE status_type_id = (                                    " +
-                "                         SELECT id                           " +
-                "                         FROM status_types                   " +
-                "                         WHERE name = 'Waiting for Customer' " +
-                "                        )"
+                " WHERE status_type_id NOT IN (                         " +
+                "                              SELECT id                " +
+                "                              FROM status_types        " +
+                "                              WHERE name = 'Completed' " +
+                "                                 OR name = 'Cancelled' " +
+                "                                 OR name = 'On Hold'   " +
+                "                             )"
     find get_ticket_ids(sql_query)
   end
 
@@ -73,9 +75,9 @@ class Ticket < ActiveRecord::Base
                 "       FROM statuses                                         " +
                 "       GROUP BY ticket_id                                    " +
                 "      )                                                      " +
-                " WHERE status_type_id IN (                       " +
-                "                          SELECT id              " +
-                "                          FROM status_types      " +
+                " WHERE status_type_id IN (                          " +
+                "                          SELECT id                 " +
+                "                          FROM status_types         " +
                 "                          WHERE name = 'Cancelled'  " +
                 "                             OR name = 'Completed'  " +
                 "                         )"
