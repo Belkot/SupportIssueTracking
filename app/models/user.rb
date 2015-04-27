@@ -26,6 +26,10 @@ class User < ActiveRecord::Base
     @login || self.username || self.email
   end
 
+  def active_for_authentication?
+    super && enable
+  end
+
   def self.find_first_by_auth_conditions(warden_conditions)
     conditions = warden_conditions.dup
     if login = conditions.delete(:login)

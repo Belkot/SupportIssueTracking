@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_action :authenticate_user!
-  before_action :authorize_admin, only: [:create, :index]
+  before_action :authorize_admin, only: [:index, :create, :destroy]
 
   respond_to :html
 
@@ -10,9 +10,15 @@ class UsersController < ApplicationController
   end
 
   def create
-    # admins only
     @user = User.new(user_params)
     flash[:notice] = "New user #{@user.username} created." if @user.save
+    redirect_to users_path
+  end
+
+  def destroy
+    @user = User.find(params[:id])
+    @user.enable = false
+    flash[:notice] = "User #{@user.username} disabled." if @user.save
     redirect_to users_path
   end
 
