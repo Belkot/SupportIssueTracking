@@ -5,30 +5,30 @@ class TicketsController < ApplicationController
   respond_to :html
 
   def unassigned
-    @tickets = Ticket.unassigned
+    @tickets = paginate Ticket.unassigned
     render 'index'
   end
 
   def open
-    @tickets = Ticket.open
+    @tickets = paginate Ticket.open
     render 'index'
   end
 
   def onhold
-    @tickets = Ticket.onhold
+    @tickets = paginate Ticket.onhold
     render 'index'
   end
 
   def closed
-    @tickets = Ticket.closed
+    @tickets = paginate Ticket.closed
     render 'index'
   end
 
   def index
     if params[:search]
-      @tickets = Ticket.search(params[:search])
+      @tickets = paginate Ticket.search(params[:search])
     else
-      @tickets = Ticket.all
+      @tickets = paginate Ticket.all
     end
     respond_with(@tickets)
   end
@@ -71,6 +71,18 @@ class TicketsController < ApplicationController
   end
 
   private
+
+    def paginate(obj, per=25)
+      if obj.is_a? Array
+        Kaminari.paginate_array(obj).page(params[:page]).per(per)
+      else
+        obj.page params[:page]
+      end
+    end
+    # def paginate(array)
+    #   Kaminari.paginate_array(array).page(params[:page]).per(3)
+    # end
+
     def set_ticket
       if user_signed_in?
         @ticket = Ticket.find(params[:id])

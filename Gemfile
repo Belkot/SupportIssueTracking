@@ -4,6 +4,7 @@ gem 'haml-rails', '~> 0.9.0'
 gem 'simple_form', '~> 3.1.0'
 gem 'twitter-bootstrap-rails', '~> 3.2.0'
 gem 'devise', '~> 3.4.1'
+gem 'kaminari', '~> 0.16.3'
 
 group :development, :test do
   gem 'rspec-rails', '~> 3.2.1'
