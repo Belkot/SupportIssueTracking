@@ -9,14 +9,14 @@
           %th Name
           %th Email
           %th Department
-          %th Curent status
+          /%th Curent status
       %tbody
         %tr
-          %td= time_tag @ticket.created_at.to_time
+          %td.col-md-3= time_tag @ticket.created_at.to_time
           %td= @ticket.name
           %td= @ticket.email
-          %td= @ticket.department.try(:name)
-          %td= @ticket.statuses.order(created_at: :desc).first.status_type.name
+          %td.col-md-3= @ticket.department.try(:name)
+          /%td= @ticket.statuses.order(created_at: :desc).first.status_type.name
     %b Subject:
     = @ticket.subject
     %br
@@ -24,16 +24,15 @@
     = @ticket.body
     %p
       %b Answers:
-      %table.table
+      %table.table.table-striped
         %thead
           %tr
-            %th
             %th
             %th
         %tbody
           - @ticket.answers.order(created_at: :asc).each do |answer|
             %tr
-              %td
+              %td.col-md-3
                 - if answer.user
                   %b #{answer.user.username}
                 - else
@@ -53,6 +52,7 @@
     .row
       .col-md-6
         %b Curent status:
+        %br
         - if user_signed_in?
           = simple_form_for [@ticket, @ticket.statuses.order(created_at: :desc).first] do |f|
             = f.error_notification
@@ -64,6 +64,7 @@
           = @ticket.statuses.order(created_at: :desc).first.status_type.name
       .col-md-6
         %b Curent owner:
+        %br
         - if @ticket.owners.any?
           = @ticket.owners.order(created_at: :desc).first.user.username
         - if user_signed_in?
@@ -77,7 +78,7 @@
     .row
       .col-md-12
         %b Status history:
-        %table.table.table-striped
+        %table.table.table-striped.table-condensed
           %thead
             %tr
               %th
@@ -85,7 +86,7 @@
           %tbody
             - @ticket.statuses.order(created_at: :asc).each do |status|
               %tr
-                %td
+                %td.col-md-6
                   = time_tag status.created_at.to_time
                   - if status.user
                     %b #{status.user.username}
@@ -100,13 +101,13 @@
     .row
       .col-md-12
         %b Owners history:
-        %table.table.table-striped
+        %table.table.table-striped.table-condensed
           %thead
             %tr
+              %th
               %th
           %tbody
             - @ticket.owners.order(created_at: :asc).each do |owner|
               %tr
-                %td
-                  = time_tag owner.created_at.to_time
-                  = owner.user.username
+                %td.col-md-6= time_tag owner.created_at.to_time
+                %td= owner.user.username
