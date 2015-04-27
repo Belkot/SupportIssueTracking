@@ -1,4 +1,5 @@
 class StatusTypesController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_status_type, only: [:show, :edit, :update, :destroy]
 
   respond_to :html

@@ -1,4 +1,5 @@
 class OwnersController < ApplicationController
+  before_action :authenticate_user!
 
   def create
     @owner = Owner.new
