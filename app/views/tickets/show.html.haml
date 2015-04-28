@@ -54,7 +54,7 @@
         %b Curent status:
         %br
         - if user_signed_in?
-          = simple_form_for [@ticket, @ticket.statuses.order(created_at: :desc).first] do |f|
+          = simple_form_for [@ticket, @ticket.statuses.order(created_at: :desc).first], url: ticket_statuses_path(@ticket), method: :post do |f|
             = f.error_notification
             .form-inputs
               = f.association :status_type, required: true, label: false, as: :radio_buttons

@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   resources :departments
 
   resources :tickets, only: [:index, :show, :create, :new] do
-    resources :statuses, only: :update
+    resources :statuses, only: :create
     resources :owners, only: :create
     resources :answers, only: :create
     collection do
