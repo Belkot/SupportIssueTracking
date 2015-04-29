@@ -2,9 +2,12 @@
   %h1 Department
 %p
   %strong Name:
+  = @department.name
   %br
-    = @department.name
+  %strong Status:
+  = @department.enable ? 'Enable' : 'Disable'
 
 = link_to 'Back', departments_path, class: 'btn btn-default'
 = link_to 'Edit', edit_department_path(@department), class: 'btn btn-default'
-= link_to 'Disable', department_path(@department), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger'
+- if @department.enable
+  = link_to 'Disable', department_path(@department), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger'
