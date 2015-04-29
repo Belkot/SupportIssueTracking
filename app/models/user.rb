@@ -7,11 +7,7 @@ class User < ActiveRecord::Base
 
   attr_accessor :login
 
-  validates :username,
-  :presence => true,
-  :uniqueness => {
-    :case_sensitive => false
-  }
+  validates :username, presence: true, uniqueness: { case_sensitive: false }
 
   has_many :owners
   has_many :tickets, through: :owners

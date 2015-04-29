@@ -1,10 +1,11 @@
 FactoryGirl.define do
   factory :ticket do
-    name "MyString"
-email "MyString"
-department nil
-reference "MyString"
-subject "MyString"
+    name { Faker::Name.name }
+    email { Faker::Internet.email }
+    department
+    #association :department, factory: :department, name: "Head department"
+    #reference nil
+    subject { Faker::Lorem.sentence }
+    body { Faker::Hacker.say_something_smart }
   end
-
 end

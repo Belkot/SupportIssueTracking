@@ -6,10 +6,13 @@ class Ticket < ActiveRecord::Base
   has_many :status_types, through: :statuses
   has_many :answers
 
+  before_validation :set_reference, on: :create
+
   validates :name, presence: true, length: { in: 3..30 }
 
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
-  validates :email, presence: true, length: { in: 3..127 }, format: { with: VALID_EMAIL_REGEX }
+  #validates :email, presence: true, length: { in: 5..127 }, format: { with: VALID_EMAIL_REGEX }
+  validates :email, presence: true, length: { in: 5..127 }, email: true
 
   validates :department, presence: true
 
@@ -19,7 +22,6 @@ class Ticket < ActiveRecord::Base
   validates :subject, presence: true, length: { in: 5..255 }
   validates :body, presence: true, length: { in: 15..4000 }
 
-  before_validation :set_reference, on: :create
   after_create :set_status_waiting_for_staff_response
 
   def self.search(query)
