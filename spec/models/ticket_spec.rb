@@ -5,90 +5,100 @@ RSpec.describe Ticket, type: :model do
     expect(build(:ticket)).to be_valid
   end
 
-  it "is invalid without a name" do
-    ticket = build(:ticket, name: nil)
-    ticket.valid?
-    expect(ticket.errors[:name]).to include("can't be blank")
-  end
+  context "is invalid" do
 
-  it "is invalid without a email" do
-    ticket = build(:ticket, email: nil)
-    ticket.valid?
-    expect(ticket.errors[:email]).to include("can't be blank")
-  end
-
-  it "is invalid without a department" do
-    ticket = build(:ticket, department: nil)
-    ticket.valid?
-    expect(ticket.errors[:department]).to include("can't be blank")
-  end
-
-  it "is invalid without a subject" do
-    ticket = build(:ticket, subject: nil)
-    ticket.valid?
-    expect(ticket.errors[:subject]).to include("can't be blank")
-  end
-
-  it "is invalid without a body" do
-    ticket = build(:ticket, body: nil)
-    ticket.valid?
-    expect(ticket.errors[:body]).to include("can't be blank")
-  end
-
-  it "is invalid with a short name" do
-    ticket = build(:ticket, name: 'Ab')
-    ticket.valid?
-    expect(ticket.errors[:name]).to include("is too short (minimum is 3 characters)")
-  end
-
-  it "is invalid with a long name" do
-    long_name = 'a' * 31
-    ticket = build(:ticket, name: long_name)
-    ticket.valid?
-    expect(ticket.errors[:name]).to include("is too long (maximum is 30 characters)")
-  end
-
-  it "is invalid when format email invalid" do
-    emails = %w[user@foo,com user_at_foo.org example.user@foo.foo@bar_baz.com foo@bar+baz.com]
-    emails.each do |email|
-      ticket = build(:ticket, email: email)
-      expect(ticket).not_to be_valid
+    it "without a name" do
+      ticket = build(:ticket, name: nil)
+      ticket.valid?
+      expect(ticket.errors[:name]).to include("can't be blank")
     end
+
+    it "without a email" do
+      ticket = build(:ticket, email: nil)
+      ticket.valid?
+      expect(ticket.errors[:email]).to include("can't be blank")
+    end
+
+    it "without a department" do
+      ticket = build(:ticket, department: nil)
+      ticket.valid?
+      expect(ticket.errors[:department]).to include("can't be blank")
+    end
+
+    it "without a subject" do
+      ticket = build(:ticket, subject: nil)
+      ticket.valid?
+      expect(ticket.errors[:subject]).to include("can't be blank")
+    end
+
+    it "without a body" do
+      ticket = build(:ticket, body: nil)
+      ticket.valid?
+      expect(ticket.errors[:body]).to include("can't be blank")
+    end
+
+    it "with a short name" do
+      ticket = build(:ticket, name: 'Ab')
+      ticket.valid?
+      expect(ticket.errors[:name]).to include("is too short (minimum is 3 characters)")
+    end
+
+    it "with a long name" do
+      long_name = 'a' * 31
+      ticket = build(:ticket, name: long_name)
+      ticket.valid?
+      expect(ticket.errors[:name]).to include("is too long (maximum is 30 characters)")
+    end
+
+    it "when format email invalid" do
+      emails = %w[user@foo,com user_at_foo.org example.user@foo.foo@bar_baz.com foo@bar+baz.com]
+      emails.each do |email|
+        ticket = build(:ticket, email: email)
+        expect(ticket).not_to be_valid
+      end
+    end
+
+    it "with a long email" do
+      long_name = 'a' * 110 + '18invalid@test.com'
+      ticket = build(:ticket, email: long_name)
+      ticket.valid?
+      expect(ticket.errors[:email]).to include("is too long (maximum is 127 characters)")
+    end
+
+    it "with a short subject" do
+      shot_subject = 'Abcd'
+      ticket = build(:ticket, subject: shot_subject)
+      ticket.valid?
+      expect(ticket.errors[:subject]).to include("is too short (minimum is 5 characters)")
+    end
+
+    it "with a long subject" do
+      long_subject = 'a' * 256
+      ticket = build(:ticket, subject: long_subject)
+      ticket.valid?
+      expect(ticket.errors[:subject]).to include("is too long (maximum is 255 characters)")
+    end
+
+    it "with a short body" do
+      shot_body = '14Abcdefghijkl'
+      ticket = build(:ticket, body: shot_body)
+      ticket.valid?
+      expect(ticket.errors[:body]).to include("is too short (minimum is 15 characters)")
+    end
+
+    it "with a long body" do
+      long_body = 'a' * 4001
+      ticket = build(:ticket, body: long_body)
+      ticket.valid?
+      expect(ticket.errors[:body]).to include("is too long (maximum is 4000 characters)")
+    end
+
   end
 
-  it "is invalid with a long email" do
-    long_name = 'a' * 110 + '18invalid@test.com'
-    ticket = build(:ticket, email: long_name)
+  it "set reference" do
+    ticket = build(:ticket)
     ticket.valid?
-    expect(ticket.errors[:email]).to include("is too long (maximum is 127 characters)")
-  end
-
-  it "is invalid with a short subject" do
-    shot_subject = 'Abcd'
-    ticket = build(:ticket, subject: shot_subject)
-    ticket.valid?
-    expect(ticket.errors[:subject]).to include("is too short (minimum is 5 characters)")
-  end
-
-  it "is invalid with a long subject" do
-    long_subject = 'a' * 256
-    ticket = build(:ticket, subject: long_subject)
-    ticket.valid?
-    expect(ticket.errors[:subject]).to include("is too long (maximum is 255 characters)")
-  end
-
-  it "is invalid with a short body" do
-    shot_body = '14Abcdefghijkl'
-    ticket = build(:ticket, body: shot_body)
-    ticket.valid?
-    expect(ticket.errors[:body]).to include("is too short (minimum is 15 characters)")
-  end
-
-  it "is invalid with a long body" do
-    long_body = 'a' * 4001
-    ticket = build(:ticket, body: long_body)
-    ticket.valid?
-    expect(ticket.errors[:body]).to include("is too long (maximum is 4000 characters)")
+    expect(ticket.reference).to match(/[AAA-ZZZ]\-\d{6}/)
   end
 
   context "search" do
