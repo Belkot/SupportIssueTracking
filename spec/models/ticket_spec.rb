@@ -127,17 +127,29 @@ RSpec.describe Ticket, type: :model do
                             "Completed"
                           ]
       status_type_names.each { |name| StatusType.create(name: name) }
-      @st_waiting_for_staff_response_id = StatusType.where(name: "Waiting for Staff Response").first.id
-      @st_waiting_for_customer_id = StatusType.where(name: "Waiting for Customer").first.id
-      @st_on_hold_id = StatusType.where(name: "On Hold").first.id
-      @st_cancelled_id = StatusType.where(name: "Cancelled").first.id
-      @st_completed_id = StatusType.where(name: "Completed").first.id
+
+      @user = create(:user)
+      @ticket_waiting_for_staff_response = create(:ticket)
+      Status.create(status_type: StatusType.where(name: "Waiting for Staff Response").first,
+                    ticket: @ticket_waiting_for_staff_response, user: @user)
+      @ticket_waiting_for_customer = create(:ticket)
+      Status.create(status_type: StatusType.where(name: "Waiting for Customer").first,
+                    ticket: @ticket_waiting_for_customer, user: @user)
+      @ticket_onhold = create(:ticket)
+      Status.create(status_type: StatusType.where(name: "On Hold").first,
+                    ticket: @ticket_onhold, user: @user)
+      @ticket_cancelled = create(:ticket)
+      Status.create(status_type: StatusType.where(name: "Cancelled").first,
+                    ticket: @ticket_cancelled, user: @user)
+      @ticket_completed = create(:ticket)
+      Status.create(status_type: StatusType.where(name: "Completed").first,
+                    ticket: @ticket_completed, user: @user)
     end
 
     it "new unassigned tickets" do
       # dont have owner
       ticket_with_owner = create(:ticket)
-      Owner.create(ticket_id: ticket_with_owner.id, user_id: 1)
+      Owner.create(ticket: ticket_with_owner, user: @user)
       ticket_without_owner = create(:ticket)
       expect(Ticket.unassigned).not_to include(ticket_with_owner)
       expect(Ticket.unassigned).to include(ticket_without_owner)
@@ -146,56 +158,27 @@ RSpec.describe Ticket, type: :model do
 
     it "open tickets" do
       # status is not 'Completed', 'Cancelled' or 'On Hold'
-      ticket1 = create(:ticket)
-      ticket2 = create(:ticket)
-      ticket_closed = create(:ticket)
-      ticket_canceled = create(:ticket)
-      ticket_onhold = create(:ticket)
-
-      Status.create(status_type_id: @st_waiting_for_customer_id, user_id: 1, ticket_id: ticket1.id)
-      Status.create(status_type_id: @st_waiting_for_staff_response_id, user_id: 1, ticket_id: ticket2.id)
-      Status.create(status_type_id: @st_completed_id, user_id: 1, ticket_id: ticket_closed.id)
-      Status.create(status_type_id: @st_cancelled_id, user_id: 1, ticket_id: ticket_canceled.id)
-      Status.create(status_type_id: @st_on_hold_id, user_id: 1, ticket_id: ticket_onhold.id)
-
-      expect(Ticket.open).not_to include(ticket_onhold, ticket_canceled, ticket_closed)
-      expect(Ticket.open).to include(ticket1, ticket2)
+      expect(Ticket.open).not_to include(@ticket_onhold,
+                                         @ticket_cancelled,
+                                         @ticket_closed)
+      expect(Ticket.open).to include(@ticket_waiting_for_staff_response,
+                                     @ticket_waiting_for_customer)
     end
 
     it "on hold tickets" do
       # status is 'On Hold'
-      ticket1 = create(:ticket)
-      ticket2 = create(:ticket)
-      ticket3 = create(:ticket)
-      ticket_onhold1 = create(:ticket)
-      ticket_onhold2 = create(:ticket)
-
-      Status.create(status_type_id: @st_waiting_for_customer_id, user_id: 1, ticket_id: ticket1.id)
-      Status.create(status_type_id: @st_waiting_for_staff_response_id, user_id: 1, ticket_id: ticket2.id)
-      Status.create(status_type_id: @st_completed_id, user_id: 1, ticket_id: ticket3.id)
-      Status.create(status_type_id: @st_on_hold_id, user_id: 1, ticket_id: ticket_onhold1.id)
-      Status.create(status_type_id: @st_on_hold_id, user_id: 1, ticket_id: ticket_onhold2.id)
-
-      expect(Ticket.onhold).not_to include(ticket1, ticket2, ticket3)
-      expect(Ticket.onhold).to include(ticket_onhold2, ticket_onhold1)
+      expect(Ticket.onhold).not_to include(@ticket_waiting_for_customer,
+                                           @ticket_waiting_for_staff_response,
+                                           @ticket_completed, @ticket_cancelled)
+      expect(Ticket.onhold).to include(@ticket_onhold)
     end
 
     it "closed tickets" do
       # status is 'Cancelled' and 'Completed'
-      ticket1 = create(:ticket)
-      ticket2 = create(:ticket)
-      ticket3 = create(:ticket)
-      ticket_cancelled = create(:ticket)
-      ticket_completed = create(:ticket)
-
-      Status.create(status_type_id: @st_waiting_for_customer_id, user_id: 1, ticket_id: ticket1.id)
-      Status.create(status_type_id: @st_waiting_for_staff_response_id, user_id: 1, ticket_id: ticket2.id)
-      Status.create(status_type_id: @st_on_hold_id, user_id: 1, ticket_id: ticket3.id)
-      Status.create(status_type_id: @st_cancelled_id, user_id: 1, ticket_id: ticket_cancelled.id)
-      Status.create(status_type_id: @st_completed_id, user_id: 1, ticket_id: ticket_completed.id)
-
-      expect(Ticket.closed).not_to include(ticket1, ticket2, ticket3)
-      expect(Ticket.closed).to include(ticket_completed, ticket_cancelled)
+      expect(Ticket.closed).not_to include(@ticket_waiting_for_staff_response,
+                                           @ticket_waiting_for_customer,
+                                           @ticket_onhold)
+      expect(Ticket.closed).to include(@ticket_completed, @ticket_cancelled)
     end
 
   end
