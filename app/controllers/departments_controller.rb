@@ -36,7 +36,7 @@ class DepartmentsController < ApplicationController
   def destroy
     @department.enable = false
     flash[:notice] = "Department #{@department.name} disabled." if @department.save
-    respond_with(@department)
+    redirect_to departments_path
   end
 
   private

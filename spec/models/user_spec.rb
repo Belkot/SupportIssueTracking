@@ -9,7 +9,7 @@ RSpec.describe User, type: :model do
 
   it "as admin" do
     user = build(:user)
-    admin = build(:user, admin: true)
+    admin = build(:admin)
     expect(user.admin?).to be false
     expect(admin.admin?).to be true
   end

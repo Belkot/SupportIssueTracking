@@ -1,4 +1,5 @@
 class StatusesController < ApplicationController
+  before_action :authenticate_user!
 
   def create
     status = Status.new(status_params)
