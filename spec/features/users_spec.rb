@@ -16,8 +16,7 @@ feature 'User management' do
       fill_in 'Username', with: 'newadmin'
       fill_in 'Email', with: 'newadmin@example.com'
       find('.user_password').fill_in 'Password', with: '12345678'
-      find('.user_password_confirmation').fill_in 'Password confirmation',
-        with: '12345678'
+      find('.user_password_confirmation').fill_in 'Password confirmation', with: '12345678'
       check 'Admin'
       click_button 'Create'
     }.to change(User, :count).by(1)

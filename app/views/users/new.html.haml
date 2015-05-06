@@ -1,4 +1,14 @@
 .page-header
   %h1 New user
 
-= render 'form'
+= simple_form_for(resource, as: resource_name, url: create_user_path) do |f|
+  = f.error_notification
+  .form-inputs
+    = f.input :username, required: true, autofocus: true
+    = f.input :email, required: true
+    = f.input :password, required: true, hint: ("#{@minimum_password_length} characters minimum" if @validatable)
+    = f.input :password_confirmation, required: true
+    = f.input :admin
+  .form-actions
+    = f.button :submit, "Create", class: 'btn-primary'
+    = link_to 'Cancel', users_path, class: 'btn btn-default'

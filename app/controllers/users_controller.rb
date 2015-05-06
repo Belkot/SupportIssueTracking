@@ -20,7 +20,6 @@ class UsersController < ApplicationController
   end
 
   def edit
-    respond_with(@user)
   end
 
   def create
