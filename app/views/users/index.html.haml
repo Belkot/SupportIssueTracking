@@ -19,12 +19,13 @@
         %td= time_tag user.created_at.to_time
         %td= time_tag user.updated_at.to_time
         %td
-          - if !user.enable?
+          - unless user.enable?
             disable
         %td
           = link_to 'Show', user, class: 'btn btn-default btn-xs'
           = link_to 'Edit', edit_user_path(user), class: 'btn btn-default btn-xs'
-          = link_to 'Disable', user, method: :delete, :data => { :confirm => 'Are you sure?' }, class: 'btn btn-xs btn-danger'
+          - if user.enable?
+            = link_to 'Disable', user, method: :delete, :data => { :confirm => 'Are you sure?' }, class: 'btn btn-xs btn-danger'
 
 %br
 = link_to 'New', new_user_path, class: 'btn btn-primary'
