@@ -1,11 +1,25 @@
 class UsersController < ApplicationController
   before_action :authenticate_user!
-  before_action :authorize_admin, only: [:index, :create, :destroy]
+  before_action :authorize_admin
+  before_action :set_user, only: [:show, :edit, :update, :destroy]
 
   respond_to :html
 
   def index
     @users = User.all
+    respond_with(@user)
+  end
+
+  def new
+    @user = User.new
+    respond_with(@user)
+  end
+
+  def show
+    respond_with(@user)
+  end
+
+  def edit
     respond_with(@user)
   end
 
@@ -15,8 +29,12 @@ class UsersController < ApplicationController
     redirect_to users_path
   end
 
+  def update
+    @user.update(user_params)
+    respond_with(@user)
+  end
+
   def destroy
-    @user = User.find(params[:id])
     @user.enable = false
     flash[:notice] = "User #{@user.username} disabled." if @user.save
     redirect_to users_path
@@ -25,6 +43,10 @@ class UsersController < ApplicationController
   private
 
     def user_params
-      params.require(:user).permit(:username, :email, :password, :password_confirmation, :admin)
+      params.require(:user).permit(:username, :email, :password, :password_confirmation, :admin, :enable)
     end
+
+   def set_user
+    @user = User.find(params[:id])
+   end
 end

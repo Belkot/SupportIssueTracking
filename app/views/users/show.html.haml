@@ -1,0 +1,25 @@
+.page-header
+  %h1 User
+%p
+  %strong Name:
+  = @user.username
+  %br
+  %strong Email:
+  = @user.email
+  %br
+  %strong Admin:
+  - if @user.admin?
+    Yes
+  - else
+    No
+  %br
+  %strong Disable:
+  - if @user.enable?
+    No
+  - else
+    Yes
+
+= link_to 'Back', users_path, class: 'btn btn-default'
+= link_to 'Edit', edit_user_path(@user), class: 'btn btn-default'
+- if @user.enable?
+  = link_to 'Delete', user_path(@user), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger'
