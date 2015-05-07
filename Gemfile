@@ -18,6 +18,10 @@ group :test do
   gem 'database_cleaner', '~> 1.4.1'
 end
 
+group :production do
+  gem 'pg', '~> 0.18.1'
+end
+
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.1.8'
 # Use sqlite3 as the database for Active Record
