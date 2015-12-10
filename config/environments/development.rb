@@ -22,7 +22,7 @@ Rails.application.configure do
     port:                 587,
     domain:               'gmail.com',
     user_name:            'testrubyonrailsmailer@gmail.com',
-    password:             'testrubyonrailsmailer2015',
+    password:             '******',
     authentication:       'plain',
     enable_starttls_auto: true
   }
